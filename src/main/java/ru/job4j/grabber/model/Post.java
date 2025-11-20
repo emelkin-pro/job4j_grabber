@@ -54,11 +54,11 @@ public class Post {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return id == post.id && time == post.time;
+        return time == post.time && Objects.equals(title, post.title) && Objects.equals(link, post.link) && Objects.equals(description, post.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, time);
+        return Objects.hash(title, link, description, time);
     }
 }
