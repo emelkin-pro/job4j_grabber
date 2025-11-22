@@ -3,11 +3,11 @@ package ru.job4j.grabber.model;
 import java.util.Objects;
 
 public class Post {
-    long id;
-    String title = new String();
-    String link = new String();
-    String description = new String();
-    long time;
+    private long id;
+    private String title = new String();
+    private String link = new String();
+    private String description = new String();
+    private long time;
 
     public long getId() {
         return id;
