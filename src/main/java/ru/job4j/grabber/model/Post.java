@@ -57,6 +57,7 @@ public class Post {
         return Objects.equals(link, post.link);
     }
 
+
     @Override
     public int hashCode() {
         return Objects.hash(link);
