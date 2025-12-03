@@ -38,7 +38,8 @@ public class AlertRabbit {
         public void execute(JobExecutionContext context) {
             String param1 = context.getJobDetail().getJobDataMap().getString("param1");
             int param2 = context.getJobDetail().getJobDataMap().getInt("param2");
-            System.out.println("Rabbit runs here with param1: " + param1 + " and param2: " + param2);
+            System.out.println("Rabbit runs here with param1: " 
+                    + param1 + " and param2: " + param2);
         }
     }
 }

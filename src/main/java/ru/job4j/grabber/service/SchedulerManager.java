@@ -9,7 +9,7 @@ import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 public class SchedulerManager implements AutoCloseable {
-    private static final Logger log = Logger.getLogger(SchedulerManager.class);
+    private static final Logger LOG = Logger.getLogger(SchedulerManager.class);
     private Scheduler scheduler;
 
     public void init() {
@@ -17,7 +17,7 @@ public class SchedulerManager implements AutoCloseable {
             scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
         } catch (SchedulerException se) {
-            log.error("When init scheduler", se);
+            LOG.error("When init scheduler", se);
         }
     }
 

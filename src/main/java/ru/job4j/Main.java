@@ -6,13 +6,13 @@ import ru.job4j.grabber.service.Config;
 import ru.job4j.grabber.service.SchedulerManager;
 import ru.job4j.grabber.service.SuperJobGrab;
 import ru.job4j.grabber.stores.JdbcStore;
-import ru.job4j.grabber.stores.MemStore;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Main {
-    private static final org.apache.log4j.Logger log = Logger.getLogger(Main.class);
+    private static final org.apache.log4j.Logger LOG = Logger.getLogger(Main.class);
+
     public static void main(String[] args) throws ClassNotFoundException {
 
         var config = new Config();
@@ -23,7 +23,7 @@ public class Main {
                 config.get("db.username"),
                 config.get("db.password")
         );
-        var scheduler = new SchedulerManager()) {
+             var scheduler = new SchedulerManager()) {
             var store = new JdbcStore(connection);
             var post = new Post();
             post.setTitle("Super Java Job");
@@ -36,7 +36,7 @@ public class Main {
                     store);
             Thread.sleep(10000);
         } catch (SQLException e) {
-            log.error("When create a connection", e);
+            LOG.error("When create a connection", e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
