@@ -4,5 +4,4 @@ name text,
 text text,
 link text UNIQUE,
 created TIMESTAMP
-
 );

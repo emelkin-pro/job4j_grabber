@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-
 public class JdbcStore implements ru.job4j.grabber.stores.Store {
     private Connection connection;
 
