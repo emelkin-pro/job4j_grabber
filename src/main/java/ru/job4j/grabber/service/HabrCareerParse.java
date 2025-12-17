@@ -22,8 +22,7 @@ public class HabrCareerParse implements Parse {
         var result = new ArrayList<Post>();
         try {
             for (int i = 1; i <= TOTAL_PAGES; i++) {
-                int pageNumber = i;
-                String fullLink = "%s%s%d%s".formatted(SOURCE_LINK, PREFIX, pageNumber, SUFFIX);
+                String fullLink = "%s%s%d%s".formatted(SOURCE_LINK, PREFIX, i, SUFFIX);
                 var connection = Jsoup.connect(fullLink);
                 var document = connection.get();
                 htmlParser(document, result);
@@ -44,18 +43,29 @@ public class HabrCareerParse implements Parse {
                     .attr("datetime"));
             long timeElement = time.toInstant().toEpochMilli();
             String vacancyName = titleElement.text();
-            String link = String.format("%s%s", SOURCE_LINK,
-                    linkElement.attr("href"));
+            String link = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
+            String description = retrieveDescription(link);
             var post = new Post();
             post.setTitle(vacancyName);
             post.setLink(link);
             post.setTime(timeElement);
+            post.setDescription(description);
             result.add(post);
         });
     }
 
-    ;
-
+    private String retrieveDescription(String link) {
+        StringBuilder rsl = new StringBuilder();
+        try {
+            var connectionDescr = Jsoup.connect(link);
+            var documentDescr = connectionDescr.get();
+            var rows = documentDescr.select(".vacancy-description__text");
+            rows.forEach(row -> rsl.append(row.text()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return rsl.toString();
+    }
 
     public static void main(String[] args) {
         Parse parse = new HabrCareerParse();
