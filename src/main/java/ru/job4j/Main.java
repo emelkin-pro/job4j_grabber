@@ -5,6 +5,7 @@ import ru.job4j.grabber.model.Post;
 import ru.job4j.grabber.service.Config;
 import ru.job4j.grabber.service.SchedulerManager;
 import ru.job4j.grabber.service.SuperJobGrab;
+import ru.job4j.grabber.service.Web;
 import ru.job4j.grabber.stores.JdbcStore;
 
 import java.sql.DriverManager;
@@ -34,11 +35,9 @@ public class Main {
                     Integer.parseInt(config.get("rabbit.interval")),
                     SuperJobGrab.class,
                     store);
-            Thread.sleep(10000);
+            new Web(store).start(Integer.parseInt(config.get("server.port")));
         } catch (SQLException e) {
             LOG.error("When create a connection", e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 }
