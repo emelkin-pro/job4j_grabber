@@ -4,9 +4,11 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import ru.job4j.grabber.model.Post;
+import ru.job4j.grabber.utils.DateTimeParser;
+import ru.job4j.grabber.utils.HabrCareerDateTimeParser;
 
 import java.io.IOException;
-import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,11 @@ public class HabrCareerParse implements Parse {
     private static final String PREFIX = "/vacancies?page=";
     private static final String SUFFIX = "&q=Java%20developer&type=all";
     private static final int TOTAL_PAGES = 5;
+    private final DateTimeParser dateTimeParser;
+
+    public HabrCareerParse(DateTimeParser dateTimeParser) {
+        this.dateTimeParser = dateTimeParser;
+    }
 
     @Override
     public List<Post> fetch() {
@@ -38,10 +45,10 @@ public class HabrCareerParse implements Parse {
         rows.forEach(row -> {
             var titleElement = row.select(".vacancy-card__title").first();
             var linkElement = titleElement.child(0);
-            var time = OffsetDateTime.parse(row
+            var time = dateTimeParser.parse(row
                     .select(".vacancy-card__date time")
                     .attr("datetime"));
-            long timeElement = time.toInstant().toEpochMilli();
+            long timeElement = time.toEpochSecond(ZoneOffset.UTC);
             String vacancyName = titleElement.text();
             String link = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
             String description = retrieveDescription(link);
@@ -68,7 +75,7 @@ public class HabrCareerParse implements Parse {
     }
 
     public static void main(String[] args) {
-        Parse parse = new HabrCareerParse();
+        Parse parse = new HabrCareerParse(new HabrCareerDateTimeParser());
         parse.fetch().forEach(System.out::println);
     }
 }
