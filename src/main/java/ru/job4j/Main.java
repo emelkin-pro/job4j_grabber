@@ -2,14 +2,13 @@ package ru.job4j;
 
 import org.apache.log4j.Logger;
 import ru.job4j.grabber.model.Post;
-import ru.job4j.grabber.service.Config;
-import ru.job4j.grabber.service.SchedulerManager;
-import ru.job4j.grabber.service.SuperJobGrab;
-import ru.job4j.grabber.service.Web;
+import ru.job4j.grabber.service.*;
 import ru.job4j.grabber.stores.JdbcStore;
+import ru.job4j.grabber.utils.HabrCareerDateTimeParser;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Main {
     private static final org.apache.log4j.Logger LOG = Logger.getLogger(Main.class);
@@ -26,9 +25,11 @@ public class Main {
         );
              var scheduler = new SchedulerManager()) {
             var store = new JdbcStore(connection);
-            var post = new Post();
-            post.setTitle("Super Java Job");
-            store.save(post);
+
+            Parse habrParser = new HabrCareerParse(new HabrCareerDateTimeParser());
+            List<Post> habrPosts = habrParser.fetch();
+            habrPosts.forEach(store::save);
+
             System.out.println(store.getAll());
             scheduler.init();
             scheduler.load(
